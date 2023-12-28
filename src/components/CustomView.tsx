@@ -27,7 +27,7 @@ export default function CustomView({
         width: width,
         backgroundColor: "#000",
         paddingTop: insets.top,
-        paddingBottom: insets.bottom,
+        marginBottom: insets.bottom,
       }}
     >
       {shouldScrollWithKeyboardAvoidingView ? (

@@ -66,6 +66,7 @@ const Input = forwardRef(
               borderRadius: 10,
               fontSize: adjustSize(12),
               fontWeight: "500",
+
               paddingLeft: icon ? 0 : adjustSize(10),
               flex: 1,
               ...customStyles?.textInput,

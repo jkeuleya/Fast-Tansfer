@@ -6,12 +6,17 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import StackNavigator from "./StackNavigator";
 import { ContextProvider } from "./src/hooks/Context";
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
+import { useFonts } from "expo-font";
 
 // Ignore log notification by message:
 LogBox.ignoreLogs(["Warning: ..."]);
 // Ignore all log notifications:
 LogBox.ignoreAllLogs();
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts({
+    Plus_JakartaSans: require("./assets/Font/PlusJakartaSans-VariableFont_wght.ttf"),
+  });
+
   useMemo(() => {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
@@ -21,8 +26,13 @@ export default function App() {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    await SplashScreen.hideAsync();
-  }, []);
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   const toastConfig = {
     //@ts-ignore
     success: (props) => (

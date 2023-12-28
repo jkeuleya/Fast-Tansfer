@@ -84,8 +84,8 @@ const Upload = () => {
     if (file.name === "") {
       return;
     }
-    const response = await uploadAndGetFile("POST", file.uri, value);
-    console.log(response, "response");
+    // const response = await uploadAndGetFile("POST", file.uri, value);
+    // console.log(response, "response");
   };
   // useMemo(() => {
   //   if (ismodalOpen === false && coped === true) {
