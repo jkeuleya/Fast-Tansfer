@@ -84,6 +84,7 @@ const Upload = () => {
     if (file.name === "") {
       return;
     }
+
     // const response = await uploadAndGetFile("POST", file.uri, value);
     // console.log(response, "response");
   };

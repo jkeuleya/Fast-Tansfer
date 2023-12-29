@@ -32,10 +32,10 @@ const Sales = () => {
   }, [user?.status]);
 
   const stripe = () => {
-    setUser({
-      status: "activated",
-      token: user?.token,
-    });
+    // setUser({
+    //   status: "activated",
+    //   token: user?.token,
+    // });
   };
 
   const SECTIONS = [
@@ -130,8 +130,8 @@ const Sales = () => {
           style={{
             marginTop: adjustSize(10),
             flex: 1,
-            paddingBottom: adjustSize(30),
-            marginBottom: adjustSize(60),
+            paddingBottom: adjustSize(35),
+            marginBottom: adjustSize(68),
           }}
         />
       </View>
