@@ -7,6 +7,7 @@ import StackNavigator from "./StackNavigator";
 import { ContextProvider } from "./src/hooks/Context";
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 
 // Ignore log notification by message:
 LogBox.ignoreLogs(["Warning: ..."]);

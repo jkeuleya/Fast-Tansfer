@@ -105,7 +105,6 @@ const Upload = () => {
           onPress={ButtonClick}
           customStyles={{
             gradianView: {
-              width: width - adjustSize(30),
               alignSelf: "center",
               marginBottom: adjustSize(10),
             },

@@ -1,9 +1,9 @@
 import { Dimensions, Platform, StyleSheet, Text } from "react-native";
-const baseScreenWidth = 320;
+const baseScreenWidth = 350;
 
 export const adjustSize = (size: number) => {
   // Get the device's screen width
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get("screen").width;
 
   // Calculate the adjusted size
   const adjustedSize = (size * screenWidth) / baseScreenWidth;

@@ -1,11 +1,6 @@
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { adjustSize } from "../styles/Theme";
 import { CustomViewProps } from "../types/types";
 
 export default function CustomView({
@@ -15,19 +10,17 @@ export default function CustomView({
   autoFocusInputWithoutButtonWithScroll,
   Button,
 }: CustomViewProps) {
-  const height = Dimensions.get("screen").height;
-  const width = Dimensions.get("screen").width;
   const insets = useSafeAreaInsets();
 
   return (
     <View
       style={{
         ...customStyles?.view,
-        height: height,
-        width: width,
+        flex: 1,
+        flexGrow: 1,
         backgroundColor: "#000",
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom + 10,
+        marginTop: adjustSize(insets.top),
+        marginBottom: adjustSize(insets.bottom),
       }}
     >
       {shouldScrollWithKeyboardAvoidingView ? (
@@ -36,8 +29,13 @@ export default function CustomView({
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "space-between",
+            }}
+            style={{
               flex: 1,
             }}
+            scrollEnabled={true}
           >
             {autoFocusInputWithoutButtonWithScroll ? (
               <KeyboardAvoidingView

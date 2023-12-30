@@ -118,48 +118,6 @@ const Register = () => {
         },
       }}
       shouldScrollWithKeyboardAvoidingView
-      autoFocusInputWithoutButtonWithScroll
-      Button={
-        <>
-          <Button
-            title="Register"
-            onPress={() => {
-              RegisterButton();
-            }}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "center",
-              marginVertical: adjustSize(20),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: adjustSize(13),
-                fontWeight: "400",
-
-                color: "#E0E0E0",
-              }}
-            >
-              Already have a account?
-            </Text>
-            <TouchableOpacity onPress={ButtonClick}>
-              <Text
-                style={{
-                  fontSize: adjustSize(12),
-                  fontWeight: "600",
-                  marginLeft: adjustSize(5),
-                  color: "#fff",
-                }}
-              >
-                Sign
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      }
     >
       <BackButton
         onPress={() => {
@@ -167,119 +125,166 @@ const Register = () => {
         }}
       />
 
-      <Text
-        style={[
-          baseStyles.CustomText,
-          {
-            marginTop: adjustSize(10),
-            marginBottom: adjustSize(20),
-          },
-        ]}
+      <View
+        style={{
+          flex: 1,
+          flexGrow: 1,
+          marginBottom: adjustSize(20),
+        }}
       >
-        Register your Account
-      </Text>
-      <Input
-        ref={mailRef}
-        focus={focus.mail}
-        value={email}
-        returnKeyType="next"
-        onChangeText={(text) => {
-          setEmail(text);
-        }}
-        onSubmitEditing={() => {
-          passwordRef.current?.focus();
-        }}
-        onFocus={() => {
-          setFocus({
-            mail: true,
-            password: false,
-            comfirmPassword: false,
-          });
-        }}
-        onBlur={() => {
-          setFocus({
-            mail: false,
-            password: false,
-            comfirmPassword: false,
-          });
-        }}
-        icon={<WithLocalSvg asset={require("../../../assets/Svg/mail.svg")} />}
-        placeholder="Enter your email"
-        customStyles={{
-          gradient: {
-            marginBottom: adjustSize(20),
-          },
-        }}
-      />
-      <Input
-        ref={passwordRef}
-        value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-        }}
-        focus={focus.password}
-        returnKeyType="next"
-        onSubmitEditing={() => {
-          comfirmPasswordRef.current?.focus();
-        }}
-        onFocus={() => {
-          setFocus({
-            mail: false,
-            password: true,
-            comfirmPassword: false,
-          });
-        }}
-        onBlur={() => {
-          setFocus({
-            mail: false,
-            password: false,
-            comfirmPassword: false,
-          });
-        }}
-        icon={
-          <WithLocalSvg asset={require("../../../assets/Svg/password.svg")} />
-        }
-        placeholder="Enter your password"
-        secureTextEntry
-        keyboardType="default"
-        customStyles={{
-          gradient: {
-            marginBottom: adjustSize(20),
-          },
-        }}
-      />
-      <Input
-        ref={comfirmPasswordRef}
-        focus={focus.comfirmPassword}
-        value={comfirmPassword}
-        onChangeText={(text) => {
-          setComfirmPassword(text);
-        }}
-        returnKeyType="done"
-        onSubmitEditing={() => {
+        <Text
+          style={[
+            baseStyles.CustomText,
+            {
+              marginTop: adjustSize(10),
+              marginBottom: adjustSize(20),
+            },
+          ]}
+        >
+          Register your Account
+        </Text>
+        <Input
+          ref={mailRef}
+          focus={focus.mail}
+          value={email}
+          returnKeyType="next"
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
+          onSubmitEditing={() => {
+            passwordRef.current?.focus();
+          }}
+          onFocus={() => {
+            setFocus({
+              mail: true,
+              password: false,
+              comfirmPassword: false,
+            });
+          }}
+          onBlur={() => {
+            setFocus({
+              mail: false,
+              password: false,
+              comfirmPassword: false,
+            });
+          }}
+          icon={
+            <WithLocalSvg asset={require("../../../assets/Svg/mail.svg")} />
+          }
+          placeholder="Enter your email"
+          customStyles={{
+            gradient: {
+              marginBottom: adjustSize(20),
+            },
+          }}
+        />
+        <Input
+          ref={passwordRef}
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+          focus={focus.password}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            comfirmPasswordRef.current?.focus();
+          }}
+          onFocus={() => {
+            setFocus({
+              mail: false,
+              password: true,
+              comfirmPassword: false,
+            });
+          }}
+          onBlur={() => {
+            setFocus({
+              mail: false,
+              password: false,
+              comfirmPassword: false,
+            });
+          }}
+          icon={
+            <WithLocalSvg asset={require("../../../assets/Svg/password.svg")} />
+          }
+          placeholder="Enter your password"
+          secureTextEntry
+          keyboardType="default"
+          customStyles={{
+            gradient: {
+              marginBottom: adjustSize(20),
+            },
+          }}
+        />
+        <Input
+          ref={comfirmPasswordRef}
+          focus={focus.comfirmPassword}
+          value={comfirmPassword}
+          onChangeText={(text) => {
+            setComfirmPassword(text);
+          }}
+          returnKeyType="done"
+          onSubmitEditing={() => {
+            RegisterButton();
+          }}
+          onFocus={() => {
+            setFocus({
+              mail: false,
+              password: false,
+              comfirmPassword: true,
+            });
+          }}
+          onBlur={() => {
+            setFocus({
+              mail: false,
+              password: false,
+              comfirmPassword: false,
+            });
+          }}
+          icon={
+            <WithLocalSvg asset={require("../../../assets/Svg/password.svg")} />
+          }
+          placeholder="Confirm Password"
+          secureTextEntry
+          keyboardType="default"
+        />
+      </View>
+      <Button
+        title="Register"
+        onPress={() => {
           RegisterButton();
         }}
-        onFocus={() => {
-          setFocus({
-            mail: false,
-            password: false,
-            comfirmPassword: true,
-          });
-        }}
-        onBlur={() => {
-          setFocus({
-            mail: false,
-            password: false,
-            comfirmPassword: false,
-          });
-        }}
-        icon={
-          <WithLocalSvg asset={require("../../../assets/Svg/password.svg")} />
-        }
-        placeholder="Confirm Password"
-        secureTextEntry
-        keyboardType="default"
       />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          alignSelf: "center",
+          marginVertical: adjustSize(20),
+        }}
+      >
+        <Text
+          style={{
+            fontSize: adjustSize(13),
+            fontWeight: "400",
+
+            color: "#E0E0E0",
+          }}
+        >
+          Already have a account?
+        </Text>
+        <TouchableOpacity onPress={ButtonClick}>
+          <Text
+            style={{
+              fontSize: adjustSize(12),
+              fontWeight: "600",
+              marginLeft: adjustSize(5),
+              color: "#fff",
+            }}
+          >
+            Sign
+          </Text>
+        </TouchableOpacity>
+      </View>
     </CustomView>
   );
 };

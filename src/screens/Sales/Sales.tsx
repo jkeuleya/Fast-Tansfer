@@ -12,7 +12,7 @@ import Modal from "react-native-modal";
 import Button from "../../components/Button";
 import Accordion from "react-native-collapsible/Accordion";
 import { uploadAndGetFile } from "../../libs/api.Routes";
-import { SalesProps } from "../../types/types";
+import { SalesProps, ContextType } from "../../types/types";
 import { removeTokens } from "../../hooks/AsyncStorage";
 import Toast from "react-native-toast-message";
 
@@ -69,7 +69,7 @@ const Sales = () => {
   }
 
   return (
-    <CustomView>
+    <CustomView customStyles={{}}>
       <Headerbar>
         <View
           style={{
@@ -129,9 +129,10 @@ const Sales = () => {
           renderItem={({ item, index }) => <Items item={item} key={index} />}
           style={{
             marginTop: adjustSize(10),
-            flex: 1,
-            paddingBottom: adjustSize(35),
-            marginBottom: adjustSize(68),
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{
+            flexGrow: 1,
           }}
         />
       </View>

@@ -96,52 +96,10 @@ const Login = () => {
         },
       }}
       shouldScrollWithKeyboardAvoidingView
-      autoFocusInputWithoutButtonWithScroll
-      Button={
-        <>
-          <Button
-            title="Log in"
-            onPress={() => {
-              Login();
-            }}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "center",
-              marginVertical: adjustSize(20),
-            }}
-          >
-            <Text
-              style={{
-                fontSize: adjustSize(13),
-                fontWeight: "400",
-
-                color: "#E0E0E0",
-              }}
-            >
-              Don’t have an account?
-            </Text>
-            <TouchableOpacity onPress={ButtonClick}>
-              <Text
-                style={{
-                  fontSize: adjustSize(12),
-                  fontWeight: "600",
-                  marginLeft: adjustSize(5),
-                  color: "#fff",
-                }}
-              >
-                Register
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      }
     >
       <View
         style={{
-          height: "30%",
+          height: `${adjustSize(30)}%`,
           width: "100%",
           alignItems: "center",
           justifyContent: "center",
@@ -153,6 +111,7 @@ const Login = () => {
             marginTop: adjustSize(10),
           }}
         />
+
         <GradientText
           text="Fast Transfer"
           customStyles={{
@@ -178,6 +137,7 @@ const Login = () => {
             ref={mailRef}
             focus={focus.mail}
             returnKeyType="next"
+            keyboardType="email-address"
             value={mail}
             onChangeText={(e) => {
               setMail(e);
@@ -240,6 +200,43 @@ const Login = () => {
             keyboardType="default"
           />
         </View>
+      </View>
+      <Button
+        title="Log in"
+        onPress={() => {
+          Login();
+        }}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          alignSelf: "center",
+          marginVertical: adjustSize(20),
+        }}
+      >
+        <Text
+          style={{
+            fontSize: adjustSize(13),
+            fontWeight: "400",
+
+            color: "#E0E0E0",
+          }}
+        >
+          Don’t have an account?
+        </Text>
+        <TouchableOpacity onPress={ButtonClick}>
+          <Text
+            style={{
+              fontSize: adjustSize(12),
+              fontWeight: "600",
+              marginLeft: adjustSize(5),
+              color: "#fff",
+            }}
+          >
+            Register
+          </Text>
+        </TouchableOpacity>
       </View>
     </CustomView>
   );
