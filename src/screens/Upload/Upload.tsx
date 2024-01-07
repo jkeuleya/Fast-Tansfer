@@ -1,32 +1,27 @@
-import { View, Text, Dimensions, TouchableOpacity } from "react-native";
-import React, { useMemo } from "react";
+import { useNavigation } from "@react-navigation/native";
+import * as Clipboard from "expo-clipboard";
+import * as DocumentPicker from "expo-document-picker";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import Modal from "react-native-modal";
+import { WithLocalSvg } from "react-native-svg";
+import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import Headerbar from "../../components/Headerbar";
-import BackButton from "../../components/BackButton";
-import { NavigationProps } from "../../types/types";
-import { useNavigation } from "@react-navigation/native";
-import { adjustSize, colors } from "../../styles/Theme";
-import { LinearGradient } from "expo-linear-gradient";
-import { WithLocalSvg } from "react-native-svg";
 import Input from "../../components/Input";
-import * as DocumentPicker from "expo-document-picker";
-import Button from "../../components/Button";
-import { usecontext } from "../../hooks/Context";
-import Modal from "react-native-modal";
 import { uploadAndGetFile } from "../../libs/api.Routes";
+import { adjustSize, colors } from "../../styles/Theme";
+import { NavigationProps, ResponseFileUrl } from "../../types/types";
+import * as WebBrowser from "expo-web-browser";
 const Upload = () => {
   const [ismodalOpen, setismodalOpen] = React.useState<boolean>(false);
 
   const [value, onChangeText] = React.useState("");
 
-  const [coped, setcoped] = React.useState<boolean>(false);
+  const [copiedText, setCopiedText] = React.useState<string>("");
   const navavigation: NavigationProps = useNavigation();
 
-  const [data, setData] = React.useState<{
-    file: any;
-  }>({
-    file: null as unknown as File,
-  });
   const [file, setFile] = React.useState<{
     name?: string;
     type?: string;
@@ -49,13 +44,9 @@ const Upload = () => {
 
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
+      // supports only files of type '*/*'
       type: "*/*",
-      copyToCacheDirectory: true,
-      multiple: false,
-    });
-
-    setData({
-      file: result.assets,
+      copyToCacheDirectory: false,
     });
 
     setFile({
@@ -84,18 +75,42 @@ const Upload = () => {
     if (file.name === "") {
       return;
     }
+    //@ts-ignore
+    const response: ResponseFileUrl = await uploadAndGetFile(
+      "POST",
+      //@ts-ignore
+      file,
+      value
+    );
 
-    // const response = await uploadAndGetFile("POST", file.uri, value);
-    // console.log(response, "response");
+    if (response.status !== 201) {
+      return;
+    }
+
+    if (response.status === 201) {
+      setCopiedText(response.data.url);
+    }
+    console.log(
+      "data",
+      response.data,
+      "status",
+      response.status,
+      "statusText",
+      response.statusText
+    );
+
+    setFile({
+      name: "",
+      type: "",
+      uri: "",
+      lastModified: {
+        date: "",
+        time: "",
+      },
+    });
+    onChangeText("");
+    setismodalOpen(true);
   };
-  // useMemo(() => {
-  //   if (ismodalOpen === false && coped === true) {
-  //     (async () => {
-
-  //     })();
-  //     setcoped(false);
-  //   }
-  // }, [ismodalOpen, coped]);
 
   return (
     <CustomView
@@ -114,19 +129,17 @@ const Upload = () => {
       }
     >
       <Headerbar>
-        <BackButton
-          onPress={() => {
-            navavigation.goBack();
+        <Text
+          style={{
+            fontSize: adjustSize(20),
+            fontWeight: "600",
+            color: colors.white,
+            paddingHorizontal: adjustSize(13),
           }}
-          title="Upload File"
-          customStyles={{
-            text: {
-              fontSize: adjustSize(20),
-            },
-          }}
-        />
+        >
+          Upload
+        </Text>
       </Headerbar>
-
       <View
         style={{
           flex: 1,
@@ -269,7 +282,7 @@ const Upload = () => {
         )}
 
         <Input
-          placeholder="set price"
+          placeholder="Set Price"
           value={value}
           onChangeText={(text) => onChangeText(text)}
           keyboardType="numeric"
@@ -334,10 +347,11 @@ const Upload = () => {
                   height: adjustSize(50),
                 },
               }}
-              onPress={() => {
-                // stripe();
+              onPress={async () => {
+                await Clipboard.setString(copiedText);
+                // await WebBrowser.openBrowserAsync(copiedText);
                 setismodalOpen(false);
-                setcoped(true);
+                navavigation.navigate("Sales");
               }}
             />
           </View>

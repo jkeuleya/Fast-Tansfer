@@ -49,12 +49,26 @@ const Sales = () => {
 
   const response = async () => {
     const response = await uploadAndGetFile("GET");
-    setData(response as SalesProps);
-  };
+    console.log(response);
 
-  React.useMemo(() => {
-    response();
-  }, [data.length < 2]);
+    if (response.status === 401 || response.statusText === "Unauthorized") {
+      await removeTokens();
+      setUser({
+        status: undefined,
+        token: undefined,
+      });
+    }
+
+    if (response.status === 200) {
+      //@ts-ignore
+      setData(response.data);
+    }
+  };
+  React.useEffect(() => {
+    if (!modal) {
+      response();
+    }
+  }, [modal]);
 
   console.log(data);
 

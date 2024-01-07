@@ -1,13 +1,15 @@
 import api from "../hooks/axios";
-import { SalesProps } from "../types/types";
+import { FileUpload, SalesProps } from "../types/types";
 interface Credentials {
   email: string;
   password: string;
 }
 
 interface FileUploadResponse {
-  fileId: string;
-  success: boolean;
+  data?: FileUpload;
+  status?: number;
+  statusText?: string;
+  error?: string;
 }
 
 export const login = async (credentials: Credentials): Promise<any> => {
@@ -20,7 +22,7 @@ export const login = async (credentials: Credentials): Promise<any> => {
     });
     return response.data;
   } catch (error) {
-    return error;
+    return console.log(error, "login");
   }
 };
 
@@ -32,8 +34,6 @@ export const register = async (credentials: Credentials): Promise<any> => {
         password: credentials.password,
       },
     });
-    console.log(response.data, "response.data from register");
-
     return response.data;
   } catch (error) {
     return error;
@@ -44,39 +44,54 @@ export const uploadAndGetFile = async (
   method: "GET" | "POST",
   file?: string,
   price?: string
-): Promise<FileUploadResponse | SalesProps[]> => {
+): Promise<
+  | FileUploadResponse
+  | {
+      data?: SalesProps[];
+      status?: number;
+      statusText?: string;
+      error?: string;
+    }
+> => {
   try {
     if (method === "GET") {
       const response = await api.get<SalesProps[]>("/uploads");
-      return response.data;
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
     } else if (method === "POST") {
       const document = file;
-
       const formData = new FormData();
-      formData.append("upload[document]", document!);
-      formData.append("upload[price]", price!);
 
-      const response = await fetch(
-        "https://fast-transfer-api-staging-b93efabd8361.herokuapp.com/api/v1/uploads",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // Append the file to the FormData object
+      formData.append("document", document!);
 
-      console.log(response.json(), "response from uploadAndGetFile");
+      // Append other form fields
+      formData.append("price", price!);
 
-      //@ts-ignore
-      return [response.data]; // Wrap the response in an array for consistency with GET response
+      const response = await api.post("/uploads", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      });
+
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
     } else {
       throw new Error("Invalid parameters for the request.");
     }
   } catch (error) {
-    console.error(error);
-    throw error;
+    return {
+      status: 401,
+      statusText: "Unauthorized",
+      //@ts-ignore
+      error: error.message,
+    };
   }
 };

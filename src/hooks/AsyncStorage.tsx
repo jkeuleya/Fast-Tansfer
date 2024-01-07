@@ -79,29 +79,3 @@ export const removeTokens = async () => {
   await AsyncStorage.removeItem("registerToken");
   return "Logged out ...";
 };
-
-// // Example usage
-// const main = async () => {
-//   // Add login data with status and token
-//   addLoginData("loggedIn", "exampleLoginToken");
-
-//   // Add register data with only the token
-//   addRegisterToken("exampleRegisterToken");
-
-//   // Get login data
-//   const loginData = await getLoginData();
-//   if (loginData) {
-//     console.log("Login Status:", loginData.status);
-//     console.log("Login Token:", loginData.token);
-//   } else {
-//     console.log("Login data not found.");
-//   }
-
-//   // Get register token
-//   const registerToken = await getRegisterToken();
-//   if (registerToken) {
-//     console.log("Register Token:", registerToken);
-//   } else {
-//     console.log("Register token not found.");
-//   }
-// };

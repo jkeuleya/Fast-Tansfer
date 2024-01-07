@@ -33,15 +33,16 @@ const Contact = () => {
   return (
     <CustomView>
       <Headerbar>
-        <BackButton
-          onPress={() => navagation.goBack()}
-          title="Contact"
-          customStyles={{
-            text: {
-              fontSize: adjustSize(20),
-            },
+        <Text
+          style={{
+            fontSize: adjustSize(20),
+            fontWeight: "600",
+            color: colors.white,
+            paddingHorizontal: adjustSize(13),
           }}
-        />
+        >
+          Contact
+        </Text>
       </Headerbar>
       <View
         style={{

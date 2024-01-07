@@ -1,25 +1,24 @@
-import React, { ReactNode, createContext, useContext } from "react";
+import React, { ReactNode, createContext, useContext, useMemo } from "react";
 import { ContextType, UserProps } from "../types/types";
-import { getLoginData, getToken } from "./AsyncStorage";
+import { getLoginData, getToken, removeTokens } from "./AsyncStorage";
 
 const MyContext = createContext<ContextType | undefined>(undefined);
 
 export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = React.useState<UserProps | null>(null);
 
-  if (user === null || user === undefined) {
-    async function getUser() {
-      const token = await getToken();
-      const status = await getLoginData();
-      if (token !== null && status !== null) {
-        setUser({
-          token: token.token,
-          //@ts-ignore
-          status: status.status,
-        });
-      }
+  async function getUser() {
+    const token = await getToken();
+    const status = await getLoginData();
+    if (token !== null && status !== null) {
+      setUser({
+        token: token.token,
+        //@ts-ignore
+        status: status.status,
+      });
     }
-
+  }
+  if (user === null || user === undefined) {
     getUser();
   }
 

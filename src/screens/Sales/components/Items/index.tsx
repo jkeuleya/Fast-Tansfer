@@ -7,20 +7,17 @@ import * as Clipboard from "expo-clipboard";
 
 const Items = ({
   item,
-  onDeletePress,
 }: {
   item: {
-    created_at?: string;
-    id?: number;
-    price?: number;
-    sold_count?: number;
-    status?: "created" | "sold";
-    stripe_price_id?: string;
-    stripe_product_id?: string;
-    updated_at?: string;
-    user_id?: number;
+    created_at: string;
+    id: number;
+    name: string;
+    price: number;
+    sold_count: number;
+    status: string;
+    url: string;
+    user_id: number;
   };
-  onDeletePress?: TouchableOpacity["props"]["onPress"];
 }) => {
   return (
     <View
@@ -58,13 +55,16 @@ const Items = ({
                 color: "#fff",
               }}
             >
-              {item.status}
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
         ) : (
           <Button
             disabled={true}
-            title={item.status as string}
+            title={
+              item.status.charAt(0).toUpperCase() +
+              item.status.slice(1).toString()
+            }
             customStyles={{
               gradianView: {
                 width: adjustSize(80),
@@ -89,20 +89,9 @@ const Items = ({
             alignItems: "center",
           }}
         >
-          <TouchableOpacity onPress={onDeletePress}>
-            <WithLocalSvg
-              asset={require("../../../../../assets/Svg/trash.svg")}
-              height={adjustSize(20)}
-              width={adjustSize(20)}
-              style={{
-                marginRight: adjustSize(10),
-              }}
-            />
-          </TouchableOpacity>
-
           <TouchableOpacity
             onPress={() => {
-              // Clipboard.setString(item.title);
+              Clipboard.setString(item.url);
             }}
           >
             <WithLocalSvg
@@ -138,7 +127,7 @@ const Items = ({
               color: "#fff",
             }}
           >
-            {item.stripe_product_id}
+            {item.name}
           </Text>
           <View
             style={{

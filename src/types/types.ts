@@ -49,21 +49,30 @@ export interface BackButtonProps {
 }
 
 export type SalesProps = Array<{
-  created_at?: string;
-  id?: number;
-  price?: number;
-  sold_count?: number;
-  status?: "created" | "sold";
-  stripe_price_id?: string;
-  stripe_product_id?: string;
-  updated_at?: string;
-  user_id?: number;
+  created_at: string;
+  id: number;
+  name: string;
+  price: number;
+  sold_count: number;
+  status: string;
+  url: string;
+  user_id: number;
 }>;
 
 export interface UserProps {
   token?: string | undefined;
   status?: "activated" | "created" | undefined;
 }
+export type ResponseFileUrl = {
+  data: FileUpload;
+  status: number;
+  statusText: string;
+};
+
+export type FileUpload = {
+  id: number;
+  url: string;
+};
 
 export interface ContextType {
   user: UserProps | null;

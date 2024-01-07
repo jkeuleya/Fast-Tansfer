@@ -2,16 +2,16 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
+import Toast from "react-native-toast-message";
 import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import GradientText from "../../components/GradientText";
 import Input from "../../components/Input";
+import { addLoginData } from "../../hooks/AsyncStorage";
 import { usecontext } from "../../hooks/Context";
 import { login } from "../../libs/api.Routes";
 import { adjustSize, baseStyles } from "../../styles/Theme";
 import { LoginResponse, NavigationProps } from "../../types/types";
-import { addLoginData } from "../../hooks/AsyncStorage";
-import Toast from "react-native-toast-message";
 
 const Login = () => {
   const navigation: NavigationProps = useNavigation();
@@ -207,6 +207,7 @@ const Login = () => {
           Login();
         }}
       />
+
       <View
         style={{
           flexDirection: "row",

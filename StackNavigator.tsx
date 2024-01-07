@@ -66,10 +66,6 @@ const StackNavigator = () => {
           name="Upload"
           component={Upload}
           options={{
-            tabBarStyle: {
-              display: "none",
-            },
-
             title: "",
             tabBarIcon: () => {
               return (
@@ -85,9 +81,6 @@ const StackNavigator = () => {
           name="Contact"
           component={Contact}
           options={{
-            tabBarStyle: {
-              display: "none",
-            },
             tabBarIcon: ({ color }) => {
               if (color === "#fff") {
                 return (
