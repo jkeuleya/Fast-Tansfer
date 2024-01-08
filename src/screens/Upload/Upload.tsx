@@ -13,7 +13,6 @@ import Input from "../../components/Input";
 import { uploadAndGetFile } from "../../libs/api.Routes";
 import { adjustSize, colors } from "../../styles/Theme";
 import { NavigationProps, ResponseFileUrl } from "../../types/types";
-import * as WebBrowser from "expo-web-browser";
 const Upload = () => {
   const [ismodalOpen, setismodalOpen] = React.useState<boolean>(false);
 
@@ -349,7 +348,6 @@ const Upload = () => {
               }}
               onPress={async () => {
                 await Clipboard.setString(copiedText);
-                // await WebBrowser.openBrowserAsync(copiedText);
                 setismodalOpen(false);
                 navavigation.navigate("Sales");
               }}

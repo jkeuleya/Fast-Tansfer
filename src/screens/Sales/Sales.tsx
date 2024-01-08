@@ -1,41 +1,43 @@
 import React, { useMemo } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import Accordion from "react-native-collapsible/Accordion";
+import Modal from "react-native-modal";
 import { WithLocalSvg } from "react-native-svg";
+import Toast from "react-native-toast-message";
+import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import GradientText from "../../components/GradientText";
 import Headerbar from "../../components/Headerbar";
+import { removeTokens } from "../../hooks/AsyncStorage";
+import { usecontext } from "../../hooks/Context";
+import {
+  getAgainStatus,
+  getStripeurl,
+  uploadAndGetFile,
+} from "../../libs/api.Routes";
 import { adjustSize, colors } from "../../styles/Theme";
+import { SalesProps } from "../../types/types";
 import Empty from "./components/EmptyItem";
 import Items from "./components/Items";
-import { usecontext } from "../../hooks/Context";
-import Modal from "react-native-modal";
-import Button from "../../components/Button";
-import Accordion from "react-native-collapsible/Accordion";
-import { uploadAndGetFile } from "../../libs/api.Routes";
-import { SalesProps, ContextType } from "../../types/types";
-import { removeTokens } from "../../hooks/AsyncStorage";
-import Toast from "react-native-toast-message";
+import { WebView } from "react-native-webview";
 
 const Sales = () => {
   const { setUser, user } = usecontext();
-
+  const { showWebView, setShowWebView } = usecontext();
   const [data, setData] = React.useState<SalesProps>([]);
 
   const [modal, setModal] = React.useState(
     user?.status === "created" || user?.status === undefined ? true : false
   );
+  const [StripeUrl, setStripeUrl] = React.useState<string>("");
 
   useMemo(() => {
     setModal(
       user?.status === "created" || user?.status === undefined ? true : false
     );
   }, [user?.status]);
-
-  const stripe = () => {
-    // setUser({
-    //   status: "activated",
-    //   token: user?.token,
-    // });
+  const stripe = async () => {
+    setShowWebView(true);
   };
 
   const SECTIONS = [
@@ -49,8 +51,6 @@ const Sales = () => {
 
   const response = async () => {
     const response = await uploadAndGetFile("GET");
-    console.log(response);
-
     if (response.status === 401 || response.statusText === "Unauthorized") {
       await removeTokens();
       setUser({
@@ -64,8 +64,16 @@ const Sales = () => {
       setData(response.data);
     }
   };
+  const getStripe = async () => {
+    const response = await getStripeurl();
+    if (response.status === 200) {
+      setStripeUrl(response.url!);
+    }
+  };
   React.useEffect(() => {
-    if (!modal) {
+    if (modal) {
+      getStripe();
+    } else {
       response();
     }
   }, [modal]);
@@ -80,6 +88,42 @@ const Sales = () => {
         token: undefined,
       });
     }
+  }
+  if (showWebView) {
+    return (
+      <WebView
+        source={{ uri: StripeUrl }}
+        style={{ marginTop: 20 }}
+        onError={(error) => {
+          console.log(error, "error");
+        }}
+        onHttpError={async (event) => {
+          if (event.nativeEvent.statusCode === 422) {
+            await setShowWebView(false);
+
+            await getAgainStatus().then((response) => {
+              if (response.status === 200) {
+                Toast.show({
+                  type: "success",
+                  text2: "Account Activated",
+                });
+                setUser({
+                  status: response.data?.confirmation_status
+                    ? "activated"
+                    : "created",
+                  token: user?.token,
+                });
+              } else {
+                Toast.show({
+                  type: "error",
+                  text2: "Something went wrong",
+                });
+              }
+            });
+          }
+        }}
+      />
+    );
   }
 
   return (

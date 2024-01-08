@@ -77,6 +77,8 @@ export type FileUpload = {
 export interface ContextType {
   user: UserProps | null;
   setUser: (arg: UserProps) => void;
+  showWebView: boolean;
+  setShowWebView: (arg: boolean) => void;
 }
 
 export type LoginResponse = {

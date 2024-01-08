@@ -16,7 +16,7 @@ import { useMemo } from "react";
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-  const { user } = usecontext();
+  const { user, showWebView } = usecontext();
 
   function MyTabs() {
     const Ios = Platform.OS === "ios";
@@ -25,6 +25,7 @@ const StackNavigator = () => {
         initialRouteName="Sales"
         screenOptions={{
           headerShown: false,
+
           tabBarActiveTintColor: "#fff",
           tabBarStyle: {
             backgroundColor: colors.secondary,
@@ -35,6 +36,7 @@ const StackNavigator = () => {
             padding: adjustSize(4),
             borderTopEndRadius: adjustSize(15),
             borderTopStartRadius: adjustSize(15),
+            display: showWebView ? "none" : "flex",
           },
         }}
       >

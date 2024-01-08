@@ -39,7 +39,48 @@ export const register = async (credentials: Credentials): Promise<any> => {
     return error;
   }
 };
-
+export const getStripeurl = async (): Promise<{
+  url?: string;
+  status?: number;
+  statusText?: string;
+  error?: string;
+}> => {
+  try {
+    const response = await api.get("/registration/confirm");
+    return {
+      url: response.data.url,
+      status: response.status,
+      statusText: response.statusText,
+    };
+  } catch (error) {
+    return {
+      //@ts-ignore
+      error: error.message,
+    };
+  }
+};
+export const getAgainStatus = async (): Promise<{
+  data?: {
+    confirmation_status: boolean;
+  };
+  status?: number;
+  statusText?: string;
+  error?: string;
+}> => {
+  try {
+    const response = await api.get("/session/confirmation_status");
+    return {
+      data: response.data,
+      status: response.status,
+      statusText: response.statusText,
+    };
+  } catch (error) {
+    return {
+      //@ts-ignore
+      error: error.message,
+    };
+  }
+};
 export const uploadAndGetFile = async (
   method: "GET" | "POST",
   file?: string,

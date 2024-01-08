@@ -19,8 +19,8 @@ export default function CustomView({
         flex: 1,
         flexGrow: 1,
         backgroundColor: "#000",
-        marginTop: adjustSize(insets.top),
-        marginBottom: adjustSize(insets.bottom),
+        paddingTop: adjustSize(insets.top),
+        paddingBottom: adjustSize(insets.bottom),
       }}
     >
       {shouldScrollWithKeyboardAvoidingView ? (

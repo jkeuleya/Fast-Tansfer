@@ -7,6 +7,8 @@ const MyContext = createContext<ContextType | undefined>(undefined);
 export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = React.useState<UserProps | null>(null);
 
+  const [showWebView, setShowWebView] = React.useState(false);
+
   async function getUser() {
     const token = await getToken();
     const status = await getLoginData();
@@ -32,6 +34,8 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
       value={{
         setUser,
         user,
+        showWebView,
+        setShowWebView,
       }}
     >
       {children}
