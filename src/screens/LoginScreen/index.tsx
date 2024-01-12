@@ -7,11 +7,11 @@ import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import GradientText from "../../components/GradientText";
 import Input from "../../components/Input";
-import { addLoginData } from "../../hooks/AsyncStorage";
+import { addLoginData, updateLoginData } from "../../hooks/AsyncStorage";
 import { usecontext } from "../../hooks/Context";
-import { login } from "../../libs/api.Routes";
+import { getAgainStatus, login } from "../../libs/api.Routes";
 import { adjustSize, baseStyles } from "../../styles/Theme";
-import { LoginResponse, NavigationProps } from "../../types/types";
+import { NavigationProps } from "../../types/types";
 
 const Login = () => {
   const navigation: NavigationProps = useNavigation();
@@ -32,60 +32,53 @@ const Login = () => {
   };
   const Login = async () => {
     if (mail === "") {
-      Toast.show({
+      return Toast.show({
         type: "error",
         text2: "Please enter your email",
       });
-      return;
     }
     if (password === "") {
-      Toast.show({
+      return Toast.show({
         type: "error",
         text2: "Please enter your password",
       });
-      return;
     }
 
-    const response: LoginResponse = await login({
+    const response = await login({
       email: mail,
       password,
     });
-    if (response.message === "Request failed with status code 401") {
-      Toast.show({
+    if (response.status === 401) {
+      return Toast.show({
         type: "error",
         text2: "Please enter your email and password correctly",
       });
-      return;
     }
-    if (response.message === "Request failed with status code 500") {
-      Toast.show({
-        type: "error",
-        text2: "please try again later",
-      });
-      return;
+    if (response.status === 200) {
+      await addLoginData(response.data?.status!, response.data?.token!);
+      const comformStatus = await getAgainStatus();
+      console.log(comformStatus);
+      if (comformStatus.status === 200) {
+        await updateLoginData(
+          comformStatus.data?.confirmation_status ? "activated" : "created"
+        );
+        Toast.show({
+          type: "success",
+          text2: "Login successful!",
+        });
+        setUser({
+          status: comformStatus.data?.confirmation_status
+            ? "activated"
+            : "created",
+          token: response.data?.token!,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text2: "Please try again later!",
+        });
+      }
     }
-    if (response.message === "Network Error") {
-      Toast.show({
-        type: "error",
-        text2: "Please check your internet connection",
-      });
-      return;
-    }
-
-    await addLoginData(response.status, response.token);
-
-    if (response.status !== "") {
-      Toast.show({
-        type: "success",
-        text2: "Login successful!",
-      });
-    }
-
-    setUser({
-      //@ts-ignore
-      status: response.status,
-      token: response.token,
-    });
   };
 
   return (

@@ -1,5 +1,6 @@
 import api from "../hooks/axios";
 import { FileUpload, SalesProps } from "../types/types";
+
 interface Credentials {
   email: string;
   password: string;
@@ -12,7 +13,16 @@ interface FileUploadResponse {
   error?: string;
 }
 
-export const login = async (credentials: Credentials): Promise<any> => {
+export const login = async (
+  credentials: Credentials
+): Promise<{
+  data?: {
+    token: string;
+    status: "activated" | "created";
+  };
+  status?: number;
+  error?: string;
+}> => {
   try {
     const response = await api.post("/session", {
       session: {
@@ -20,9 +30,17 @@ export const login = async (credentials: Credentials): Promise<any> => {
         password: credentials.password,
       },
     });
-    return response.data;
+    return {
+      data: response.data,
+      status: response.status,
+    };
   } catch (error) {
-    return console.log(error, "login");
+    return {
+      //@ts-ignore
+      error: error.message,
+      //@ts-ignore
+      status: error.response.status,
+    };
   }
 };
 
@@ -59,6 +77,31 @@ export const getStripeurl = async (): Promise<{
     };
   }
 };
+
+export const getFaQs = async (): Promise<{
+  data?: {
+    title: string;
+    answer: string;
+  }[];
+  status?: number;
+  statusText?: string;
+  error?: string;
+}> => {
+  try {
+    const response = await api.get("/questions");
+    return {
+      data: response.data,
+      status: response.status,
+      statusText: response.statusText,
+    };
+  } catch (error) {
+    return {
+      //@ts-ignore
+      error: error.message,
+    };
+  }
+};
+
 export const getAgainStatus = async (): Promise<{
   data?: {
     confirmation_status: boolean;

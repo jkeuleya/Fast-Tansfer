@@ -1,6 +1,6 @@
-import React, { ReactNode, createContext, useContext, useMemo } from "react";
+import React, { ReactNode, createContext, useContext } from "react";
 import { ContextType, UserProps } from "../types/types";
-import { getLoginData, getToken, removeTokens } from "./AsyncStorage";
+import { getLoginData, getToken } from "./AsyncStorage";
 
 const MyContext = createContext<ContextType | undefined>(undefined);
 
@@ -10,14 +10,20 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [showWebView, setShowWebView] = React.useState(false);
 
   async function getUser() {
-    const token = await getToken();
     const status = await getLoginData();
-    if (token !== null && status !== null) {
+    //@ts-ignore
+    if (status.token !== null && status?.status !== null) {
       setUser({
-        token: token.token,
+        //@ts-ignore
+        token: status.token,
         //@ts-ignore
         status: status.status,
       });
+      console.log(
+        status?.token,
+        status?.status,
+        "saving user getting from async storage"
+      );
     }
   }
   if (user === null || user === undefined) {

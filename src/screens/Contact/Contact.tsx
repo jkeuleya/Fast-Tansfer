@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import CustomView from "../../components/CustomView";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProps } from "../../types/types";
@@ -8,28 +8,27 @@ import Headerbar from "../../components/Headerbar";
 import { adjustSize, colors } from "../../styles/Theme";
 import { WithLocalSvg } from "react-native-svg";
 import Accordion from "react-native-collapsible/Accordion";
+import { getFaQs } from "../../libs/api.Routes";
 
 const Contact = () => {
   const navagation: NavigationProps = useNavigation();
-  const SECTIONS = [
-    {
-      title: "What is Fast Transfer App?",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, odit minima similique illo commodi deleniti sequi neque numquam repellat assumenda! Modi officia laborum vel assumenda ducimus voluptatum inventore unde magni.",
-    },
-    {
-      title: "Suggestions",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, odit minima similique illo commodi deleniti sequi neque numquam repellat assumenda! Modi officia laborum vel assumenda ducimus voluptatum inventore unde magni.",
-    },
-    {
-      title: "Upload/ Share ",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, odit minima similique illo commodi deleniti sequi neque numquam repellat assumenda! Modi officia laborum vel assumenda ducimus voluptatum inventore unde magni.",
-    },
-  ];
-  const [activeSections, setActiveSections] = React.useState<number[]>([]);
 
+  const [SECTIONS, setSECTIONS] = React.useState<
+    {
+      title: string;
+      answer: string;
+    }[]
+  >([]);
+  const [activeSections, setActiveSections] = React.useState<number[]>([]);
+  useEffect(() => {
+    async function prepare() {
+      const response = await getFaQs();
+      if (response.status === 200) {
+        setSECTIONS(response.data || []);
+      }
+    }
+    prepare();
+  }, [SECTIONS.length <= 0]);
   return (
     <CustomView>
       <Headerbar>
@@ -162,7 +161,8 @@ const Contact = () => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingVertical: adjustSize(15),
-                    borderBottomWidth: index === 2 ? 0 : isActive ? 0 : 0.5,
+                    borderBottomWidth:
+                      index === SECTIONS.length - 1 ? 0 : isActive ? 0 : 0.5,
                     borderBottomColor: colors.secondaryLight,
                   }}
                 >
@@ -188,12 +188,13 @@ const Contact = () => {
                 </View>
               );
             }}
-            renderContent={({ content }, index, isActive) => {
+            renderContent={({ answer }, index, isActive) => {
               return (
                 <View
                   style={{
                     paddingVertical: adjustSize(2),
-                    borderBottomWidth: index === 2 ? 0 : !isActive ? 0 : 0.5,
+                    borderBottomWidth:
+                      index === SECTIONS.length - 1 ? 0 : !isActive ? 0 : 0.5,
                     borderBottomColor: colors.secondaryLight,
                     paddingBottom: adjustSize(10),
                   }}
@@ -205,7 +206,7 @@ const Contact = () => {
                       color: colors.secondaryLight,
                     }}
                   >
-                    {content}
+                    {answer}
                   </Text>
                 </View>
               );

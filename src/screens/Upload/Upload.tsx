@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import * as Clipboard from "expo-clipboard";
-import * as DocumentPicker from "expo-document-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
@@ -13,6 +12,7 @@ import Input from "../../components/Input";
 import { uploadAndGetFile } from "../../libs/api.Routes";
 import { adjustSize, colors } from "../../styles/Theme";
 import { NavigationProps, ResponseFileUrl } from "../../types/types";
+import * as DocumentPicker from "expo-document-picker";
 const Upload = () => {
   const [ismodalOpen, setismodalOpen] = React.useState<boolean>(false);
 
@@ -43,29 +43,29 @@ const Upload = () => {
 
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
-      // supports only files of type '*/*'
       type: "*/*",
-      copyToCacheDirectory: false,
+      copyToCacheDirectory: true,
+      multiple: false,
     });
-
-    setFile({
-      //@ts-ignore
-      name: result?.assets[0].name.split(".")[0],
-      //@ts-ignore
-      type: result?.assets[0].mimeType,
-      //@ts-ignore
-      uri: result?.assets[0].uri,
-      //@ts-ignore
-      lastModified: {
-        date:
-          new Date().getFullYear().toString() +
-          "/" +
-          new Date().getMonth().toString() +
-          "/" +
-          new Date().getDate().toString(),
-        time: new Date().getHours().toString() + ":" + new Date().getMinutes(),
-      },
-    });
+    console.log(result);
+    // setFile({
+    //   //@ts-ignore
+    //   name: result?.assets[0].name.split(".")[0],
+    //   //@ts-ignore
+    //   type: result?.assets[0].mimeType,
+    //   //@ts-ignore
+    //   uri: result?.assets[0].uri,
+    //   //@ts-ignore
+    //   lastModified: {
+    //     date:
+    //       new Date().getFullYear().toString() +
+    //       "/" +
+    //       new Date().getMonth().toString() +
+    //       "/" +
+    //       new Date().getDate().toString(),
+    //     time: new Date().getHours().toString() + ":" + new Date().getMinutes(),
+    //   },
+    // });
   };
   const ButtonClick = async () => {
     if (value === "") {
@@ -75,40 +75,40 @@ const Upload = () => {
       return;
     }
     //@ts-ignore
-    const response: ResponseFileUrl = await uploadAndGetFile(
-      "POST",
-      //@ts-ignore
-      file,
-      value
-    );
+    // const response: ResponseFileUrl = await uploadAndGetFile(
+    //   "POST",
+    //   //@ts-ignore
+    //   file,
+    //   value
+    // );
 
-    if (response.status !== 201) {
-      return;
-    }
+    // if (response.status !== 201) {
+    //   return;
+    // }
 
-    if (response.status === 201) {
-      setCopiedText(response.data.url);
-    }
-    console.log(
-      "data",
-      response.data,
-      "status",
-      response.status,
-      "statusText",
-      response.statusText
-    );
+    // if (response.status === 201) {
+    //   setCopiedText(response.data.url);
+    // }
+    // console.log(
+    //   "data",
+    //   response.data,
+    //   "status",
+    //   response.status,
+    //   "statusText",
+    //   response.statusText
+    // );
 
-    setFile({
-      name: "",
-      type: "",
-      uri: "",
-      lastModified: {
-        date: "",
-        time: "",
-      },
-    });
-    onChangeText("");
-    setismodalOpen(true);
+    // setFile({
+    //   name: "",
+    //   type: "",
+    //   uri: "",
+    //   lastModified: {
+    //     date: "",
+    //     time: "",
+    //   },
+    // });
+    // onChangeText("");
+    // setismodalOpen(true);
   };
 
   return (

@@ -1,5 +1,11 @@
 import React, { useMemo } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import Modal from "react-native-modal";
 import { WithLocalSvg } from "react-native-svg";
@@ -8,7 +14,7 @@ import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import GradientText from "../../components/GradientText";
 import Headerbar from "../../components/Headerbar";
-import { removeTokens } from "../../hooks/AsyncStorage";
+import { addLoginData, removeTokens } from "../../hooks/AsyncStorage";
 import { usecontext } from "../../hooks/Context";
 import {
   getAgainStatus,
@@ -20,11 +26,13 @@ import { SalesProps } from "../../types/types";
 import Empty from "./components/EmptyItem";
 import Items from "./components/Items";
 import { WebView } from "react-native-webview";
+import { useNavigation } from "@react-navigation/native";
 
 const Sales = () => {
   const { setUser, user } = usecontext();
   const { showWebView, setShowWebView } = usecontext();
   const [data, setData] = React.useState<SalesProps>([]);
+  const navigation = useNavigation();
 
   const [modal, setModal] = React.useState(
     user?.status === "created" || user?.status === undefined ? true : false
@@ -36,8 +44,11 @@ const Sales = () => {
       user?.status === "created" || user?.status === undefined ? true : false
     );
   }, [user?.status]);
+
   const stripe = async () => {
     setShowWebView(true);
+
+    //
   };
 
   const SECTIONS = [
@@ -49,7 +60,7 @@ const Sales = () => {
   ];
   const [activeSections, setActiveSections] = React.useState<number[]>([]);
 
-  const response = async () => {
+  const responses = async () => {
     const response = await uploadAndGetFile("GET");
     if (response.status === 401 || response.statusText === "Unauthorized") {
       await removeTokens();
@@ -74,11 +85,11 @@ const Sales = () => {
     if (modal) {
       getStripe();
     } else {
-      response();
+      responses();
     }
-  }, [modal]);
+  }, [modal || user?.status || data.length]);
 
-  console.log(data);
+  console.log(data, "data");
 
   async function logout() {
     const response = await removeTokens();
@@ -89,40 +100,101 @@ const Sales = () => {
       });
     }
   }
+
+  const handleNavigationStateChange = (event: any) => {
+    if (
+      event.title === event.url &&
+      event.url !== StripeUrl &&
+      event.url !== "about:blank"
+    ) {
+      console.log("event.url");
+
+      setShowWebView(false);
+      getAgainStatus()
+        .then((response) => {
+          handleGetAgainStatusResponse({
+            status: response.status!,
+            data: response.data!,
+          });
+        })
+        .catch(handleError);
+    }
+  };
+
+  const handleGetAgainStatusResponse = (response: {
+    status: number;
+    data: { confirmation_status: boolean };
+  }) => {
+    if (response.status === 200) {
+      const confirmationStatus = response.data?.confirmation_status;
+      const activationStatus = confirmationStatus ? "activated" : "created";
+
+      addLoginData(activationStatus, user?.token!);
+
+      Toast.show({
+        type: "success",
+        text2: "Account Activated",
+      });
+
+      responses();
+
+      setUser({
+        status: confirmationStatus ? "activated" : "created",
+        token: user?.token,
+      });
+
+      if (confirmationStatus === false) {
+        Toast.show({
+          type: "error",
+          text2: "Please Complete the process",
+        });
+      }
+    } else {
+      Toast.show({
+        type: "error",
+        text2: "Something went wrong",
+      });
+    }
+  };
+  const handleError = (error: any) => {
+    console.log(error, "error");
+  };
   if (showWebView) {
     return (
-      <WebView
-        source={{ uri: StripeUrl }}
-        style={{ marginTop: 20 }}
-        onError={(error) => {
-          console.log(error, "error");
-        }}
-        onHttpError={async (event) => {
-          if (event.nativeEvent.statusCode === 422) {
-            await setShowWebView(false);
-
-            await getAgainStatus().then((response) => {
-              if (response.status === 200) {
-                Toast.show({
-                  type: "success",
-                  text2: "Account Activated",
-                });
-                setUser({
-                  status: response.data?.confirmation_status
-                    ? "activated"
-                    : "created",
-                  token: user?.token,
-                });
-              } else {
-                Toast.show({
-                  type: "error",
-                  text2: "Something went wrong",
-                });
-              }
-            });
-          }
-        }}
-      />
+      <CustomView>
+        <WebView
+          source={{ uri: StripeUrl }}
+          style={{
+            flex: 1,
+          }}
+          onLoadProgress={({ nativeEvent }) => {
+            if (nativeEvent.canGoBack === false) {
+              Toast.show({
+                type: "info",
+                text2: "Opening Please Wait ...",
+              });
+            }
+          }}
+          onNavigationStateChange={handleNavigationStateChange}
+          onError={handleError}
+          removeClippedSubviews={true}
+          startInLoadingState={true}
+          scalesPageToFit={true}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          thirdPartyCookiesEnabled={true}
+          mixedContentMode={"always"}
+          allowsInlineMediaPlayback={true}
+          allowsFullscreenVideo={true}
+          mediaPlaybackRequiresUserAction={false}
+          allowsBackForwardNavigationGestures={true}
+          allowsLinkPreview={true}
+          allowsPictureInPictureMediaPlayback={true}
+          contentInsetAdjustmentBehavior="automatic"
+          enableApplePay={true}
+          originWhitelist={["*"]}
+        />
+      </CustomView>
     );
   }
 

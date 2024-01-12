@@ -41,7 +41,6 @@ export default function App() {
         {...props}
         style={{
           borderLeftColor: "#005B41",
-
           backgroundColor: "white",
           width: "90%",
           // alignSelf: "center",
@@ -75,10 +74,18 @@ export default function App() {
     ),
 
     //@ts-ignore
-    tomatoToast: ({ text1, props }) => (
+    tomatoToast: ({ text2, props }) => (
       <View style={{ height: 60, width: "100%", backgroundColor: "tomato" }}>
-        <Text>{text1}</Text>
-        <Text>{props.uuid}</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          {text2}
+        </Text>
       </View>
     ),
   };

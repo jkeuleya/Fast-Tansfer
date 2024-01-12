@@ -18,6 +18,20 @@ export const addLoginData = (status: string, token: string) => {
   });
 };
 
+export const updateLoginData = async (status: string) => {
+  const loginData = await getLoginData();
+  if (loginData) {
+    loginData.status = status;
+    AsyncStorage.setItem("loginData", JSON.stringify(loginData), (error) => {
+      if (error) {
+        console.error("Error setting login data:", error);
+      } else {
+        console.log("Login data set successfully.");
+      }
+    });
+  }
+};
+
 // Function to add register token
 export const addRegisterToken = (token: string) => {
   AsyncStorage.setItem("registerToken", JSON.stringify({ token }), (error) => {

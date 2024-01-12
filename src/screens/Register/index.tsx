@@ -10,7 +10,7 @@ import { usecontext } from "../../hooks/Context";
 import { adjustSize, baseStyles } from "../../styles/Theme";
 import { NavigationProps, RegisterResponse } from "../../types/types";
 import { register } from "../../libs/api.Routes";
-import { addRegisterToken } from "../../hooks/AsyncStorage";
+import { addLoginData, addRegisterToken } from "../../hooks/AsyncStorage";
 import Toast from "react-native-toast-message";
 
 const Register = () => {
@@ -103,7 +103,7 @@ const Register = () => {
       });
     }
 
-    await addRegisterToken(token);
+    await addLoginData("created", token);
 
     setUser({
       token: token,

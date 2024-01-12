@@ -1,18 +1,15 @@
-import {
-  BottomTabBar,
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useMemo } from "react";
 import { Platform } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
+import { usecontext } from "./src/hooks/Context";
 import Contact from "./src/screens/Contact/Contact";
 import Login from "./src/screens/LoginScreen";
 import Register from "./src/screens/Register";
 import Sales from "./src/screens/Sales/Sales";
 import Upload from "./src/screens/Upload/Upload";
 import { adjustSize, colors } from "./src/styles/Theme";
-import { usecontext } from "./src/hooks/Context";
-import { useMemo } from "react";
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
