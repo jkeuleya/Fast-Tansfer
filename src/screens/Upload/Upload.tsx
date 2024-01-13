@@ -20,7 +20,7 @@ const Upload = () => {
 
   const [copiedText, setCopiedText] = React.useState<string>("");
   const navavigation: NavigationProps = useNavigation();
-
+  const [isloading, setisloading] = React.useState<boolean>(false);
   const [file, setFile] = React.useState<{
     name?: string;
     type?: string;
@@ -47,25 +47,24 @@ const Upload = () => {
       copyToCacheDirectory: true,
       multiple: false,
     });
-    console.log(result);
-    // setFile({
-    //   //@ts-ignore
-    //   name: result?.assets[0].name.split(".")[0],
-    //   //@ts-ignore
-    //   type: result?.assets[0].mimeType,
-    //   //@ts-ignore
-    //   uri: result?.assets[0].uri,
-    //   //@ts-ignore
-    //   lastModified: {
-    //     date:
-    //       new Date().getFullYear().toString() +
-    //       "/" +
-    //       new Date().getMonth().toString() +
-    //       "/" +
-    //       new Date().getDate().toString(),
-    //     time: new Date().getHours().toString() + ":" + new Date().getMinutes(),
-    //   },
-    // });
+    setFile({
+      //@ts-ignore
+      name: result?.assets[0].name.split(".")[0],
+      //@ts-ignore
+      type: result?.assets[0].mimeType,
+      //@ts-ignore
+      uri: result?.assets[0].uri,
+      //@ts-ignore
+      lastModified: {
+        date:
+          new Date().getFullYear().toString() +
+          "/" +
+          new Date().getMonth().toString() +
+          "/" +
+          new Date().getDate().toString(),
+        time: new Date().getHours().toString() + ":" + new Date().getMinutes(),
+      },
+    });
   };
   const ButtonClick = async () => {
     if (value === "") {
@@ -74,41 +73,44 @@ const Upload = () => {
     if (file.name === "") {
       return;
     }
+    setisloading(true);
+
     //@ts-ignore
-    // const response: ResponseFileUrl = await uploadAndGetFile(
-    //   "POST",
-    //   //@ts-ignore
-    //   file,
-    //   value
-    // );
+    const response: ResponseFileUrl = await uploadAndGetFile(
+      "POST",
+      //@ts-ignore
+      file,
+      value
+    );
 
-    // if (response.status !== 201) {
-    //   return;
-    // }
+    if (response.status !== 201) {
+      return;
+    }
 
-    // if (response.status === 201) {
-    //   setCopiedText(response.data.url);
-    // }
-    // console.log(
-    //   "data",
-    //   response.data,
-    //   "status",
-    //   response.status,
-    //   "statusText",
-    //   response.statusText
-    // );
+    if (response.status === 201) {
+      setCopiedText(response.data.url);
+      console.log(
+        "data",
+        response.data,
+        "status",
+        response.status,
+        "statusText",
+        response.statusText
+      );
 
-    // setFile({
-    //   name: "",
-    //   type: "",
-    //   uri: "",
-    //   lastModified: {
-    //     date: "",
-    //     time: "",
-    //   },
-    // });
-    // onChangeText("");
-    // setismodalOpen(true);
+      setFile({
+        name: "",
+        type: "",
+        uri: "",
+        lastModified: {
+          date: "",
+          time: "",
+        },
+      });
+      onChangeText("");
+      setismodalOpen(true);
+      setisloading(false);
+    }
   };
 
   return (
@@ -117,6 +119,8 @@ const Upload = () => {
       Button={
         <Button
           onPress={ButtonClick}
+          Loading={isloading}
+          disabled={isloading}
           customStyles={{
             gradianView: {
               alignSelf: "center",
@@ -173,7 +177,7 @@ const Upload = () => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              activeOpacity={0.9}
+              activeOpacity={3}
             >
               <WithLocalSvg
                 asset={require("../../../assets/Svg/Vector.svg")}

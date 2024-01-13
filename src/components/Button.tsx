@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   Text,
   TextStyle,
@@ -13,6 +14,7 @@ import { adjustSize, colors } from "../styles/Theme";
 const Button = ({
   title,
   customStyles,
+  Loading,
   ...props
 }: {
   title: string;
@@ -21,6 +23,7 @@ const Button = ({
     View?: ViewStyle;
     text?: TextStyle;
   };
+  Loading?: boolean;
 } & TouchableOpacity["props"]) => {
   const width = Dimensions.get("screen").width;
   return (
@@ -45,14 +48,17 @@ const Button = ({
             justifyContent: "center",
             height: adjustSize(48),
             ...customStyles?.View,
+            flexDirection: "row",
           }}
         >
+          {Loading && <ActivityIndicator color="#fff" />}
           <Text
             style={{
               textAlign: "center",
               color: "#fff",
               fontWeight: "bold",
               fontSize: adjustSize(13),
+              marginLeft: Loading ? adjustSize(10) : 0,
               ...customStyles?.text,
             }}
           >

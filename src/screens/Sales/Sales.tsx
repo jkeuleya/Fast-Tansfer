@@ -1,15 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 import Modal from "react-native-modal";
 import { WithLocalSvg } from "react-native-svg";
 import Toast from "react-native-toast-message";
+import { WebView } from "react-native-webview";
 import Button from "../../components/Button";
 import CustomView from "../../components/CustomView";
 import GradientText from "../../components/GradientText";
@@ -25,8 +21,6 @@ import { adjustSize, colors } from "../../styles/Theme";
 import { SalesProps } from "../../types/types";
 import Empty from "./components/EmptyItem";
 import Items from "./components/Items";
-import { WebView } from "react-native-webview";
-import { useNavigation } from "@react-navigation/native";
 
 const Sales = () => {
   const { setUser, user } = usecontext();
@@ -61,8 +55,14 @@ const Sales = () => {
   const [activeSections, setActiveSections] = React.useState<number[]>([]);
 
   const responses = async () => {
+    console.log("responses");
     const response = await uploadAndGetFile("GET");
-    if (response.status === 401 || response.statusText === "Unauthorized") {
+    console.log(response, "response");
+    if (
+      response.status === 401 &&
+      response.statusText === "Unauthorized" &&
+      user?.status === "activated"
+    ) {
       await removeTokens();
       setUser({
         status: undefined,
@@ -78,16 +78,23 @@ const Sales = () => {
   const getStripe = async () => {
     const response = await getStripeurl();
     if (response.status === 200) {
+      console.log("stripe url", response);
+
       setStripeUrl(response.url!);
     }
   };
   React.useEffect(() => {
+    console.log("useEffect");
+
+    navigation.addListener("focus", () => {
+      responses();
+    });
     if (modal) {
       getStripe();
     } else {
       responses();
     }
-  }, [modal || user?.status || data.length]);
+  }, []);
 
   console.log(data, "data");
 
@@ -167,6 +174,9 @@ const Sales = () => {
           style={{
             flex: 1,
           }}
+          cacheEnabled={true}
+          cacheMode="LOAD_CACHE_ELSE_NETWORK"
+          har
           onLoadProgress={({ nativeEvent }) => {
             if (nativeEvent.canGoBack === false) {
               Toast.show({
@@ -386,6 +396,34 @@ const Sales = () => {
               stripe();
             }}
           />
+
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: adjustSize(20),
+            }}
+            onPress={() => {
+              logout();
+              Toast.show({
+                type: "success",
+                text2: "Logged out ...",
+              });
+            }}
+          >
+            <Text
+              style={{
+                fontSize: adjustSize(12),
+                fontWeight: "600",
+                color: "#fff",
+                marginRight: adjustSize(8),
+                marginBottom: adjustSize(2),
+              }}
+            >
+              Log Out
+            </Text>
+            <WithLocalSvg asset={require("../../../assets/Svg/Logout.svg")} />
+          </TouchableOpacity>
         </View>
       </Modal>
     </CustomView>

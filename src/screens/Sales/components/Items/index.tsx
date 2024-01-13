@@ -143,11 +143,31 @@ const Items = ({
               style={{
                 fontSize: adjustSize(11),
                 fontWeight: "500",
-                marginLeft: adjustSize(2),
+                marginLeft: adjustSize(5),
                 color: "#fff",
               }}
             >
               {item.price}
+            </Text>
+
+            <WithLocalSvg
+              asset={require("../../../../../assets/Svg/TrendingSold.svg")}
+              height={adjustSize(15)}
+              width={adjustSize(15)}
+              style={{
+                marginLeft: adjustSize(5),
+              }}
+              color={colors.white}
+            />
+            <Text
+              style={{
+                fontSize: adjustSize(11),
+                fontWeight: "500",
+                marginLeft: adjustSize(5),
+                color: "#fff",
+              }}
+            >
+              {item.sold_count}
             </Text>
           </View>
           <Text
