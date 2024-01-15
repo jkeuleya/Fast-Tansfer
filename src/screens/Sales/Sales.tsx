@@ -57,7 +57,7 @@ const Sales = () => {
   const responses = async () => {
     console.log("responses");
     const response = await uploadAndGetFile("GET");
-    console.log(response, "response");
+    console.log(response, "response get file");
     if (
       response.status === 401 &&
       response.statusText === "Unauthorized" &&
@@ -76,16 +76,23 @@ const Sales = () => {
     }
   };
   const getStripe = async () => {
+    console.log("getStripe");
+
     const response = await getStripeurl();
     if (response.status === 200) {
       console.log("stripe url", response);
 
       setStripeUrl(response.url!);
     }
+    if (response.error === "Request failed with status code 401") {
+      await removeTokens();
+      setUser({
+        status: undefined,
+        token: undefined,
+      });
+    }
   };
   React.useEffect(() => {
-    console.log("useEffect");
-
     navigation.addListener("focus", () => {
       responses();
     });
@@ -109,11 +116,7 @@ const Sales = () => {
   }
 
   const handleNavigationStateChange = (event: any) => {
-    if (
-      event.title === event.url &&
-      event.url !== StripeUrl &&
-      event.url !== "about:blank"
-    ) {
+    if (event.url !== StripeUrl && event.url !== "about:blank") {
       console.log("event.url");
 
       setShowWebView(false);

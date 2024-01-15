@@ -1,13 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useMemo } from "react";
 import { LogBox, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
 import StackNavigator from "./StackNavigator";
 import { ContextProvider } from "./src/hooks/Context";
-import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
-import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
 
 // Ignore log notification by message:
 LogBox.ignoreLogs(["Warning: ..."]);

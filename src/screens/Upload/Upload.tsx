@@ -13,6 +13,7 @@ import { uploadAndGetFile } from "../../libs/api.Routes";
 import { adjustSize, colors } from "../../styles/Theme";
 import { NavigationProps, ResponseFileUrl } from "../../types/types";
 import * as DocumentPicker from "expo-document-picker";
+import Toast from "react-native-toast-message";
 const Upload = () => {
   const [ismodalOpen, setismodalOpen] = React.useState<boolean>(false);
 
@@ -67,12 +68,29 @@ const Upload = () => {
     });
   };
   const ButtonClick = async () => {
-    if (value === "") {
-      return;
-    }
     if (file.name === "") {
-      return;
+      return Toast.show({
+        type: "error",
+        text2: "Please Select File",
+        position: "top",
+      });
     }
+    // check if value starts with 0
+    if (value[0] === "0") {
+      return Toast.show({
+        type: "error",
+        text2: "Please Enter Valid Price",
+        position: "top",
+      });
+    }
+    if (value === "") {
+      return Toast.show({
+        type: "error",
+        text2: "Please Enter Price",
+        position: "top",
+      });
+    }
+
     setisloading(true);
 
     //@ts-ignore
@@ -82,6 +100,7 @@ const Upload = () => {
       file,
       value
     );
+    console.log("response", response);
 
     if (response.status !== 201) {
       return;
@@ -305,7 +324,7 @@ const Upload = () => {
           <View
             style={{
               width: adjustSize(264),
-              height: adjustSize(380),
+              height: adjustSize(430),
               // height: "auto",
               backgroundColor: colors.secondary,
               borderRadius: adjustSize(50),
@@ -340,6 +359,34 @@ const Upload = () => {
             >
               Your file has been uploaded and ready to share.
             </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: adjustSize(20),
+                backgroundColor: "rgba(0,0,0,0.2)",
+                padding: adjustSize(10),
+                borderRadius: adjustSize(10),
+              }}
+            >
+              <WithLocalSvg
+                asset={require("../../../assets/Svg/copyLink.svg")}
+                height={adjustSize(15)}
+                width={adjustSize(15)}
+              />
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontSize: adjustSize(12),
+                  fontWeight: "500",
+                  color: colors.secondaryLight,
+
+                  marginLeft: adjustSize(5),
+                }}
+              >
+                {copiedText}
+              </Text>
+            </View>
 
             <Button
               title="Copy Link"

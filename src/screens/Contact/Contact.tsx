@@ -1,14 +1,16 @@
-import { View, Text } from "react-native";
-import React, { useEffect } from "react";
-import CustomView from "../../components/CustomView";
 import { useNavigation } from "@react-navigation/native";
-import { NavigationProps } from "../../types/types";
-import BackButton from "../../components/BackButton";
-import Headerbar from "../../components/Headerbar";
-import { adjustSize, colors } from "../../styles/Theme";
-import { WithLocalSvg } from "react-native-svg";
+import * as Clipboard from "expo-clipboard";
+import * as WebBrowser from "expo-web-browser";
+import React, { useEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
+import { WithLocalSvg } from "react-native-svg";
+import CustomView from "../../components/CustomView";
+import Headerbar from "../../components/Headerbar";
 import { getFaQs } from "../../libs/api.Routes";
+import { adjustSize, colors } from "../../styles/Theme";
+import { NavigationProps } from "../../types/types";
+import Toast from "react-native-toast-message";
 
 const Contact = () => {
   const navagation: NavigationProps = useNavigation();
@@ -57,7 +59,16 @@ const Contact = () => {
             gap: adjustSize(10),
           }}
         >
-          <View
+          <TouchableOpacity
+            activeOpacity={3}
+            onPress={async () => {
+              await Clipboard.setString("Johndoe123@ gmail.com");
+              Toast.show({
+                type: "success",
+                text2: "Email Copied",
+                position: "bottom",
+              });
+            }}
             style={{
               flex: 1,
               height: adjustSize(130),
@@ -95,11 +106,15 @@ const Contact = () => {
                   color: colors.white,
                 }}
               >
-                zikkoran@apjat.tz
+                Johndoe123@ gmail.com
               </Text>
             </View>
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={4}
+            onPress={() => {
+              WebBrowser.openBrowserAsync("https://wa.me/+33663219604");
+            }}
             style={{
               flex: 1,
 
@@ -138,10 +153,10 @@ const Contact = () => {
                   color: colors.white,
                 }}
               >
-                (272) 948-1209
+                +1 234567890
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View

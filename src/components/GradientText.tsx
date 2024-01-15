@@ -13,9 +13,9 @@ const GradientText = ({
   return (
     <MaskedView
       style={{
-        ...customStyles?.gradientContainer,
         height: adjustSize(50),
         marginTop: adjustSize(15),
+        ...customStyles?.gradientContainer,
       }}
       maskElement={
         <Text
