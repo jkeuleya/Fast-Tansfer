@@ -16,6 +16,7 @@ import { usecontext } from "../../hooks/Context";
 import { register } from "../../libs/api.Routes";
 import { adjustSize, baseStyles } from "../../styles/Theme";
 import { NavigationProps, RegisterResponse } from "../../types/types";
+import { RadioButton } from 'react-native-paper';
 
 const Register = () => {
   const navigation: NavigationProps = useNavigation();
@@ -36,6 +37,7 @@ const Register = () => {
   const [password, setPassword] = React.useState<string>("");
   const [comfirmPassword, setComfirmPassword] = React.useState<string>("");
   const [isChecked, setChecked] = React.useState<boolean>(false);
+  const [selectedCurrency, setSelectedCurrency] = React.useState<string>('usd');
 
   const ButtonClick = () => {
     navigation.goBack();
@@ -92,6 +94,7 @@ const Register = () => {
     const { token, message }: RegisterResponse = await register({
       email,
       password,
+      currency: selectedCurrency,
     });
 
     if (message === "Request failed with status code 500") {
@@ -281,6 +284,53 @@ const Register = () => {
           secureTextEntry
           keyboardType="default"
         />
+
+
+        <View
+        style={{
+          marginTop: adjustSize(20),
+          marginBottom: adjustSize(20),
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: '#9E9E9E', marginLeft: 16, fontWeight: "400", }}>Select your currency:</Text>
+        <RadioButton
+          value="USD"
+          status={selectedCurrency === 'usd' ? 'checked' : 'unchecked'}
+          onPress={() => setSelectedCurrency('usd')}
+          color="#9E9E9E" // Set the radio button color
+        />
+        <Text style={{ color: '#9E9E9E' }}>USD</Text>
+
+        <RadioButton
+          value="EUR"
+          status={selectedCurrency === 'eur' ? 'checked' : 'unchecked'}
+          onPress={() => setSelectedCurrency('eur')}
+          color="#9E9E9E" // Set the radio button color
+        />
+        <Text style={{ color: '#9E9E9E' }}>EUR</Text>
+
+        <RadioButton
+          value="GBP"
+          status={selectedCurrency === 'gbp' ? 'checked' : 'unchecked'}
+          onPress={() => setSelectedCurrency('gbp')}
+          color="#9E9E9E" // Set the radio button color
+        />
+        <Text style={{ color: '#9E9E9E' }}>GBP</Text>
+      </View>
+
+      <View
+        style={{
+          paddingVertical: adjustSize(20),
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        {/* ... (existing code) */}
+      </View>
+
+
         <View
           style={{
             paddingVertical: adjustSize(20),
@@ -369,6 +419,7 @@ const Register = () => {
           </Text>
         </View>
       </View>
+
       <Button
         title="Register"
         onPress={() => {

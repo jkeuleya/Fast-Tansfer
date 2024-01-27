@@ -4,6 +4,7 @@ import { FileUpload, SalesProps } from "../types/types";
 interface Credentials {
   email: string;
   password: string;
+  currency: string;
 }
 
 interface FileUploadResponse {
