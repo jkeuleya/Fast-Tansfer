@@ -134,7 +134,7 @@ const Sales = () => {
 
       Toast.show({
         type: "success",
-        text2: "Account Activated",
+        text2: "Account activated",
       });
 
       responses();
@@ -147,7 +147,7 @@ const Sales = () => {
       if (confirmationStatus === false) {
         Toast.show({
           type: "error",
-          text2: "Please Complete the process",
+          text2: "Please complete the process",
         });
       }
     } else {

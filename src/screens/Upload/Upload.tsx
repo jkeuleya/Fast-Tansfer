@@ -71,7 +71,7 @@ const Upload = () => {
     if (file.name === "") {
       return Toast.show({
         type: "error",
-        text2: "Please Select File",
+        text2: "Please select a file",
         position: "top",
       });
     }
@@ -79,14 +79,14 @@ const Upload = () => {
     if (value[0] === "0") {
       return Toast.show({
         type: "error",
-        text2: "Please Enter Valid Price",
+        text2: "Minimum price is 1 EUR",
         position: "top",
       });
     }
     if (value === "") {
       return Toast.show({
         type: "error",
-        text2: "Please Enter Price",
+        text2: "Please enter a price",
         position: "top",
       });
     }
@@ -103,7 +103,14 @@ const Upload = () => {
     console.log("response", response);
 
     if (response.status !== 201) {
-      return;
+      setisloading(false);
+
+      return Toast.show({
+        type: "error",
+        text2: "File size must be <= 200MB and image/mp3/mp4/pdf",
+        position: "top",
+      });
+
     }
 
     if (response.status === 201) {

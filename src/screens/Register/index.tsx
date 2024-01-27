@@ -84,7 +84,7 @@ const Register = () => {
     if (password !== comfirmPassword) {
       Toast.show({
         type: "error",
-        text2: "Please enter your password correctly",
+        text2: "Passwords are not identical",
       });
       return;
     }
@@ -97,7 +97,7 @@ const Register = () => {
     if (message === "Request failed with status code 500") {
       Toast.show({
         type: "error",
-        text2: "please try again later",
+        text2: "Please try again later",
       });
       return;
     }

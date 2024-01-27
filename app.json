@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Fast-Tansfer",
+    "name": "Fast Tansfer",
     "slug": "Fast-Tansfer",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,23 +19,26 @@
         }
       ]
     ],
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thebabe.FastTansfer"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000"
       },
-      "package": "com.sajidalee1.FastTansfer"
+      "package": "com.thebabe.FastTansfer"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "1b23379f-b21f-4c49-b809-95c8310afb39"
+        "projectId": "3fc3dbbc-f3e1-4f2c-9035-2d8823103b1c"
       }
     }
   }
