@@ -360,7 +360,7 @@ const Register = () => {
               },
             ]}
           >
-            I agree the Fast Transfer{" "}
+            I agree{" "}
             <TouchableOpacity
               style={{
                 height: adjustSize(20),
@@ -442,7 +442,7 @@ const Register = () => {
             color: "#E0E0E0",
           }}
         >
-          Already have a account?
+          Already have an account?
         </Text>
         <TouchableOpacity onPress={ButtonClick}>
           <Text
@@ -453,7 +453,7 @@ const Register = () => {
               color: "#fff",
             }}
           >
-            Sign
+            Sign in
           </Text>
         </TouchableOpacity>
       </View>

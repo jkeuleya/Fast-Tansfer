@@ -51,6 +51,7 @@ export const register = async (credentials: Credentials): Promise<any> => {
       registration: {
         email: credentials.email,
         password: credentials.password,
+        currency: credentials.currency,
       },
     });
     return response.data;

@@ -22,6 +22,7 @@ const Upload = () => {
   const [copiedText, setCopiedText] = React.useState<string>("");
   const navavigation: NavigationProps = useNavigation();
   const [isloading, setisloading] = React.useState<boolean>(false);
+  const [receivedAmount, setReceivedAmount] = React.useState<number>(0);
   const [file, setFile] = React.useState<{
     name?: string;
     type?: string;
@@ -41,6 +42,23 @@ const Upload = () => {
   });
 
   const width = Dimensions.get("screen").width;
+
+  React.useEffect(() => {
+    // Fonction de calcul du montant reçu après les frais Stripe
+    const calculateReceivedAmount = () => {
+      const price = parseFloat(value);
+      if (!isNaN(price)) {
+        const feePercentage = 3.25;
+        const feeFixed = 0.25;
+        const receivedAmount = price - (price * (feePercentage / 100) + feeFixed);
+        setReceivedAmount(receivedAmount);
+      } else {
+        setReceivedAmount(0);
+      }
+    };
+
+    calculateReceivedAmount();
+  }, [value]);
 
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({
@@ -317,6 +335,10 @@ const Upload = () => {
           keyboardType="numeric"
           icon={<WithLocalSvg asset={require("../../../assets/Svg/usd.svg")} />}
         />
+
+        <Text style={{ fontSize: adjustSize(16), color: '#9E9E9E', marginTop: adjustSize(20), textAlign: "center" }}>
+          You'll receive: {receivedAmount.toFixed(2)} EUR.
+        </Text>
 
         <Modal
           isVisible={ismodalOpen}
