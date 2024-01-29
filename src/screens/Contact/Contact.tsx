@@ -162,6 +162,63 @@ const Contact = () => {
 
           <View
             style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: adjustSize(10),
+              marginTop: adjustSize(10),
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={4}
+              onPress={() => {
+                WebBrowser.openBrowserAsync("https://connect.stripe.com/express_login");
+              }}
+              style={{
+                flex: 1,
+
+                height: adjustSize(130),
+                backgroundColor: colors.secondary,
+                borderRadius: adjustSize(13),
+                alignItems: "center",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <WithLocalSvg
+                asset={require("../../../assets/Svg/whatsapp.svg")}
+                height={adjustSize(25)}
+                width={adjustSize(25)}
+              />
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: adjustSize(14),
+                    fontWeight: "500",
+                    color: colors.secondaryLight,
+                    marginBottom: adjustSize(5),
+                  }}
+                >
+                  Stripe Dashboard
+                </Text>
+                <Text
+                  style={{
+                    fontSize: adjustSize(11),
+                    fontWeight: "400",
+                    color: colors.white,
+                  }}
+                >
+                  Click here to access your personal Stripe Dashboard
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
               flex: 1,
               marginTop: adjustSize(20),
             }}

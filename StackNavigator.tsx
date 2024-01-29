@@ -77,7 +77,7 @@ const StackNavigator = () => {
           }}
         />
         <Tab.Screen
-          name="Contact"
+          name="Support"
           component={Contact}
           options={{
             tabBarIcon: ({ color }) => {
