@@ -129,7 +129,8 @@ export const getAgainStatus = async (): Promise<{
 export const uploadAndGetFile = async (
   method: "GET" | "POST",
   file?: string,
-  price?: string
+  price?: string,
+  title?: string,
 ): Promise<
   | FileUploadResponse
   | {
@@ -156,6 +157,7 @@ export const uploadAndGetFile = async (
 
       // Append other form fields
       formData.append("price", price!);
+      formData.append("title", title!);
 
       const response = await api.post("/uploads", formData, {
         headers: {

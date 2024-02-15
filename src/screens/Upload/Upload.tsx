@@ -18,6 +18,7 @@ const Upload = () => {
   const [ismodalOpen, setismodalOpen] = React.useState<boolean>(false);
 
   const [value, onChangeText] = React.useState("");
+  const [title, setTitle] = React.useState("");
 
   const [copiedText, setCopiedText] = React.useState<string>("");
   const navavigation: NavigationProps = useNavigation();
@@ -94,6 +95,14 @@ const Upload = () => {
       });
     }
     // check if value starts with 0
+    if (title === "") {
+      return Toast.show({
+        type: "error",
+        text2: "Please enter a title",
+        position: "top",
+      });
+    }
+
     if (value[0] === "0") {
       return Toast.show({
         type: "error",
@@ -116,7 +125,8 @@ const Upload = () => {
       "POST",
       //@ts-ignore
       file,
-      value
+      value,
+      title
     );
     console.log("response", response);
 
@@ -152,6 +162,7 @@ const Upload = () => {
         },
       });
       onChangeText("");
+      setTitle("");
       setismodalOpen(true);
       setisloading(false);
     }
@@ -247,7 +258,7 @@ const Upload = () => {
               width: "100%",
               backgroundColor: colors.secondary,
               borderRadius: 20,
-              marginBottom: adjustSize(10),
+              marginBottom: adjustSize(20),
               paddingHorizontal: adjustSize(15),
               paddingVertical: adjustSize(10),
             }}
@@ -328,13 +339,25 @@ const Upload = () => {
           </View>
         )}
 
-        <Input
-          placeholder="Set Price"
-          value={value}
-          onChangeText={(text) => onChangeText(text)}
-          keyboardType="numeric"
-          icon={<WithLocalSvg asset={require("../../../assets/Svg/usd.svg")} />}
-        />
+        <View style={{ marginBottom: 25 }}>
+          <Input
+            placeholder="Set file's title" // Placeholder for the new input
+            value={title} // Value for the new input
+            onChangeText={(text) => setTitle(text)} // Update the state when the input changes
+            keyboardType="default" // Use the default keyboard type for text input
+            icon={<WithLocalSvg asset={require("../../../assets/Svg/pen.svg")} />} // Add an icon if needed
+          />
+        </View>
+
+        <View>
+          <Input
+            placeholder="Set file's price"
+            value={value}
+            onChangeText={(text) => onChangeText(text)}
+            keyboardType="numeric"
+            icon={<WithLocalSvg asset={require("../../../assets/Svg/euro.svg")} />}
+          />
+        </View>
 
         <Text style={{ fontSize: adjustSize(16), color: '#9E9E9E', marginTop: adjustSize(20), textAlign: "center" }}>
           You'll receive: {receivedAmount.toFixed(2)} EUR.
