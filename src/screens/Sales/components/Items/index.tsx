@@ -39,60 +39,25 @@ const Items = ({
           marginBottom: adjustSize(5),
         }}
       >
-        {item.status === "sold" ? (
-          <View
+        <View>
+          <Text
             style={{
-              padding: adjustSize(5),
-              paddingHorizontal: adjustSize(12),
-              borderRadius: 7,
-              backgroundColor: "#000",
+              fontSize: adjustSize(16),
+              fontWeight: "bold",
+
+              color: "#fff",
             }}
           >
-            <Text
-              style={{
-                fontSize: adjustSize(12),
-                fontWeight: "500",
-                color: "#fff",
-              }}
-            >
-              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-            </Text>
-          </View>
-        ) : (
-          <Button
-            disabled={true}
-            title={
-              item.status.charAt(0).toUpperCase() +
-              item.status.slice(1).toString()
-            }
-            customStyles={{
-              gradianView: {
-                width: adjustSize(80),
-                height: adjustSize(30),
-                borderRadius: 7,
-              },
-              View: {
-                width: adjustSize(80),
-                height: adjustSize(30),
-                borderRadius: 7,
-              },
-              text: {
-                fontWeight: "500",
-              },
-            }}
-          />
-        )}
+            {item.name}
+          </Text>
+        </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <View style={{flex: 1}}>
           <TouchableOpacity
             onPress={() => {
               Clipboard.setString(item.url);
             }}
+            style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}
           >
             <WithLocalSvg
               asset={require("../../../../../assets/Svg/copy.svg")}
@@ -106,6 +71,7 @@ const Items = ({
         style={{
           flexDirection: "row",
           paddingVertical: adjustSize(13),
+          alignItems: "flex-end",
         }}
       >
         <WithLocalSvg
@@ -119,16 +85,6 @@ const Items = ({
             flex: 1,
           }}
         >
-          <Text
-            style={{
-              fontSize: adjustSize(16),
-              fontWeight: "bold",
-
-              color: "#fff",
-            }}
-          >
-            {item.name}
-          </Text>
           <View
             style={{
               marginVertical: adjustSize(5),
@@ -137,7 +93,7 @@ const Items = ({
             }}
           >
             <WithLocalSvg
-              asset={require("../../../../../assets/Svg/usd.svg")}
+              asset={require("../../../../../assets/Svg/euro_light.svg")}
             />
             <Text
               style={{
@@ -147,11 +103,11 @@ const Items = ({
                 color: "#fff",
               }}
             >
-              {item.price}
+              {item.price + ' '}
             </Text>
 
             <WithLocalSvg
-              asset={require("../../../../../assets/Svg/TrendingSold.svg")}
+              asset={require("../../../../../assets/Svg/cart.svg")}
               height={adjustSize(15)}
               width={adjustSize(15)}
               style={{
@@ -175,6 +131,7 @@ const Items = ({
               fontSize: adjustSize(12),
               fontWeight: "500",
               color: colors.secondaryLight,
+              marginBottom: adjustSize(5),
             }}
           >
             {
